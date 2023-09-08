@@ -6751,6 +6751,51 @@
         }
       }
     },
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.AppPlatform/Spring/{serviceName}/supportedServerVersions": {
+      "get": {
+        "tags": [
+          "AppPlatform"
+        ],
+        "description": "Lists all of the available server versions supported by Microsoft.AppPlatform provider.",
+        "operationId": "Services_ListSupportedServerVersions",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          },
+          {
+            "$ref": "#/parameters/SubscriptionIdParameter"
+          },
+          {
+            "$ref": "#/parameters/ResourceGroupNameParameter"
+          },
+          {
+            "$ref": "#/parameters/ServiceNameParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success. The response describes the supported server versions.",
+            "schema": {
+              "$ref": "#/definitions/SupportedServerVersions"
+            }
+          },
+          "default": {
+            "description": "Error response describing why the operation failed.",
+            "schema": {
+              "$ref": "#/definitions/CloudError"
+            }
+          }
+        },
+        "x-ms-pageable": {
+          "nextLinkName": "nextLink"
+        },
+        "x-ms-examples": {
+          "Services_ListSupportedServerVersions": {
+            "$ref": "./examples/Services_ListSupportedServerVersions.json"
+          }
+        }
+      }
+    },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.AppPlatform/Spring/{serviceName}/gateways/{gatewayName}": {
       "get": {
         "tags": [
@@ -11637,9 +11682,17 @@
           "default": false
         },
         "autoSync": {
-          "description": "Indicates whether to automatically synchronize certificate from key vault.",
-          "type": "boolean",
-          "default": false
+          "description": "Indicates whether to automatically synchronize certificate from key vault or not.",
+          "enum": [
+            "Disabled",
+            "Enabled"
+          ],
+          "default": "Disabled",
+          "type": "string",
+          "x-ms-enum": {
+            "name": "AutoSyncCertificate",
+            "modelAsString": true
+          }
         }
       },
       "x-ms-discriminator-value": "KeyVaultCertificate"
@@ -13318,6 +13371,46 @@
       },
       "readOnly": true
     },
+    "SupportedServerVersions": {
+      "description": "Supported server versions.",
+      "type": "object",
+      "properties": {
+        "value": {
+          "description": "Collection of the supported server versions.",
+          "uniqueItems": false,
+          "type": "array",
+          "x-ms-identifiers": [
+            "value"
+          ],
+          "items": {
+            "$ref": "#/definitions/SupportedServerVersion"
+          }
+        },
+        "nextLink": {
+          "description": "URL client should use to fetch the next page (per server side paging).\r\nIt's null for now, added for future use.",
+          "type": "string"
+        }
+      }
+    },
+    "SupportedServerVersion": {
+      "description": "Supported server version.",
+      "type": "object",
+      "properties": {
+        "value": {
+          "description": "The raw server version value which could be passed to deployment CRUD operations.",
+          "type": "string"
+        },
+        "server": {
+          "description": "The server name.",
+          "type": "string"
+        },
+        "version": {
+          "description": "The Server version.",
+          "type": "string"
+        }
+      },
+      "readOnly": true
+    },
     "BuildpackBindingResourceCollection": {
       "description": "Object that includes an array of BuildpackBinding resources and a possible link for next set",
       "type": "object",
@@ -14296,19 +14389,6 @@
             "$ref": "#/definitions/ApiPortalInstance"
           },
           "readOnly": true
-        },
-        "apiTryOutEnabledState": {
-          "description": "Indicates whether the API try-out feature is enabled or disabled. When enabled, users can try out the API by sending requests and viewing responses in API portal. When disabled, users cannot try out the API.",
-          "type": "string",
-          "default": "Enabled",
-          "enum": [
-            "Enabled",
-            "Disabled"
-          ],
-          "x-ms-enum": {
-            "name": "ApiPortalApiTryOutEnabledState",
-            "modelAsString": true
-          }
         }
       }
     },
